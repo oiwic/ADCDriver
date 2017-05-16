@@ -158,3 +158,35 @@ DLLAPI int RecvData(int len, int column, unsigned char*pDataI, unsigned char*pDa
 	}
 	return 0;
 }
+
+DLLAPI int RecvDemo(int row,int* pData)
+{
+	int res;
+	struct pcap_pkthdr *header;
+	const u_char *pkt_data;
+	unsigned short counter;
+	unsigned short frameCnt;
+	int i;
+	row = (row>>1)<<1;
+		for(i=0;i<row/2;i++)
+	{
+		res = pcap_next_ex( pcapHandle, &header, &pkt_data);
+		if(res > 0)
+		{		
+			if(i == 0)
+			{
+				counter = ((*(pkt_data + 14))<<8) + (*(pkt_data + 15));	
+			}
+			frameCnt = ((*(pkt_data + 14))<<8) + (*(pkt_data + 15));
+			if(frameCnt == counter)
+			{
+				memcpy(pData+16*i,pkt_data+17,16);
+				counter++;
+			}
+		}
+		else
+			return -1;
+	}
+	return 0;
+
+}
