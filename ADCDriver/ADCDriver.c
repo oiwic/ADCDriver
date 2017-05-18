@@ -167,8 +167,8 @@ DLLAPI int RecvDemo(int row,int* pData)
 	unsigned short counter;
 	unsigned short frameCnt;
 	int i;
-	row = (row>>1)<<1;
-		for(i=0;i<row/2;i++)
+	row = row<<1;
+	for(i=0;i<row;i++)
 	{
 		res = pcap_next_ex( pcapHandle, &header, &pkt_data);
 		if(res > 0)
