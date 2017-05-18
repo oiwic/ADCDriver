@@ -2,6 +2,7 @@
 
 #include "ADCDriver.h"
 #include "pcap.h"
+#include <Winsock2.h>
 
 pcap_t *pcapHandle = NULL;									//¼àÌý¾ä±ú
 unsigned char macSrc[6] = {0x34,0x97,0xf6,0x8d,0x41,0x45};	//Ô´macµØÖ·
@@ -167,7 +168,6 @@ DLLAPI int RecvDemo(int row,int* pData)
 	unsigned short counter;
 	unsigned short frameCnt;
 	int i;
-	row = row<<1;
 	for(i=0;i<row;i++)
 	{
 		res = pcap_next_ex( pcapHandle, &header, &pkt_data);
@@ -180,7 +180,16 @@ DLLAPI int RecvDemo(int row,int* pData)
 			frameCnt = ((*(pkt_data + 14))<<8) + (*(pkt_data + 15));
 			if(frameCnt == counter)
 			{
-				memcpy(pData+16*i,pkt_data+17,16);
+				unsigned char data[8];
+				data[0] = *(pkt_data+3+17);
+				data[1] = *(pkt_data+2+17);
+				data[2] = *(pkt_data+1+17);
+				data[3] = *(pkt_data+0+17);
+				data[4] = *(pkt_data+7+17);
+				data[5] = *(pkt_data+6+17);
+				data[6] = *(pkt_data+5+17);
+				data[7] = *(pkt_data+4+17);
+				memcpy(pData+8*i,data,8);
 				counter++;
 			}
 		}
@@ -188,5 +197,4 @@ DLLAPI int RecvDemo(int row,int* pData)
 			return -1;
 	}
 	return 0;
-
 }
