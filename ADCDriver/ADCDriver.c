@@ -189,7 +189,7 @@ DLLAPI int RecvDemo(int row,int* pData)
 				data[5] = *(pkt_data+6+17);
 				data[6] = *(pkt_data+5+17);
 				data[7] = *(pkt_data+4+17);
-				memcpy(pData+8*i,data,8);
+				memcpy(pData+2*i,data,8);
 				counter++;
 			}
 		}
