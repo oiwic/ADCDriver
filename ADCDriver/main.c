@@ -1,5 +1,7 @@
 
 //#define DEBUG
+//#define DEBUG1
+
 #ifdef DEBUG
 #include "ADCDriver.h"
 #include <stdio.h>
@@ -19,5 +21,16 @@ int main()
 		ret = RecvData(2000,2000,datarecvI,datarecvQ);
 		//printf("%d",ret);
 	}
+}
+#endif
+
+#ifdef DEBUG1
+#include "ADCDriver.h"
+#include <stdio.h>
+int main()
+{
+	char list[100];
+	GetAdapterList(list);
+	printf(list);
 }
 #endif

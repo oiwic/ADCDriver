@@ -16,4 +16,6 @@ DLLAPI int SendData(int len,unsigned char*pData);
 DLLAPI int RecvData(int len,int column, unsigned char*pDataI, unsigned char *pDataQ);
 /* 从ADC读回解模数据 */
 DLLAPI int RecvDemo(int row,int* pData);
+/* 返回网卡列表 */
+DLLAPI int GetAdapterList(char*list);
 #endif

@@ -42,7 +42,7 @@ DLLAPI int OpenADC(int num)
 	 pcap_setmintocopy(pcapHandle,1024);
 	/* 设置非阻塞模式 */
 	// pcap_setnonblock(pcapHandle,1,errbuf);
-	/* 编译过滤器 */
+	/* 编译过滤器 主机mac地址是固定的，需要过滤掉源是这个地址的数据*/
 	if(pcap_compile(pcapHandle,&fcode,"ether proto 43605 && not ether src 34.97.f6.8d.41.45",1,0) < 0)
 	{
 		pcap_freealldevs(firstdev);
@@ -197,4 +197,24 @@ DLLAPI int RecvDemo(int row,int* pData)
 			return -1;
 	}
 	return 0;
+}
+
+DLLAPI int GetAdapterList(char *list)
+{
+	pcap_if_t *firstdev;
+	pcap_if_t *selectdev;
+	char   errbuf[PCAP_ERRBUF_SIZE];
+	int pos = 0;
+	/* 查找设备 */
+	 pcap_findalldevs(&firstdev,errbuf);
+	 selectdev = firstdev;
+	 while(selectdev)
+	 {
+		 memcpy(list + pos,selectdev->description,strlen(selectdev->description));
+		 pos = pos + strlen(selectdev->description)+1;
+		 *(list + pos - 1) = '\n';
+		 selectdev = selectdev->next;
+	 }
+	 *(list + pos - 1) = 0;
+	 return 0;
 }
