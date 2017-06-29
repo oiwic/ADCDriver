@@ -62,7 +62,7 @@ DLLAPI int CloseADC()
 {
 	pcap_close(pcapHandle);
 	pcapHandle = NULL;
-	return 0;
+	return OK;
 }
 
 DLLAPI int SendData(int len,unsigned char*pData)
@@ -70,6 +70,7 @@ DLLAPI int SendData(int len,unsigned char*pData)
 	unsigned char *buf = NULL;
 	int length = len+14;
 	int i;
+	if(pcapHandle == NULL) return ERR_HANDLE;
 	buf = (unsigned char*)malloc(length);
 	for(i=0;i<length;i++)
 	{
@@ -99,6 +100,7 @@ DLLAPI int RecvData(int row, int column, unsigned char*pDataI, unsigned char*pDa
 	unsigned short frameCnt;//recv frame count
 	struct pcap_pkthdr *header;
 	const u_char *pkt_data;
+	if(pcapHandle == NULL) return ERR_HANDLE;
 	while( totalI < len || totalQ < len)
 	{
 		ret = pcap_next_ex( pcapHandle, &header, &pkt_data);
@@ -161,6 +163,7 @@ DLLAPI int RecvDemo(int row,int* pData)
 	unsigned short counter;
 	unsigned short frameCnt;
 	int i;
+	if(pcapHandle == NULL) return ERR_HANDLE;
 	for(i=0;i<row;i++)
 	{
 		res = pcap_next_ex( pcapHandle, &header, &pkt_data);
@@ -224,6 +227,7 @@ DLLAPI int GetErrorMsg(int errorcode,char *strMsg)
 		case ERR_NODATA:   info = "在限定时间内没有接收到足够数据，请检查网络状况。";break;
 		case ERR_CHANNEL:  info = "数据通道不对，可能是数据错误或者不支持的协议";break;
 		case ERR_OTHER:	   info = "其他错误，比中彩票概率更低。";break;
+		case ERR_HANDLE:   info = "网卡句柄错误，可能未打开网卡。";break;
 		default:		   info = "你确定这是ADC返回的错误？";break;
 	}
 	strcat_s(strMsg,1024,info);

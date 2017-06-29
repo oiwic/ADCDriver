@@ -11,6 +11,7 @@
 #define ERR_WINPCAP 2
 #define ERR_NODATA 3
 #define ERR_CHANNEL 4
+#define ERR_HANDLE 5
 #define ERR_OTHER 100
 
 /* 打开ADC设备，需要提供目的ADC的MAC地址，协议类型，网卡的设备号 */
