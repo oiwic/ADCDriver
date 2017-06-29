@@ -1,0 +1,26 @@
+﻿生成启动时间为 2017/6/29 16:08:35。
+     1>项目“C:\Users\fortu\Documents\GitHub\ADCDriver\ADCDriver\ADCDriver.vcxproj”在节点 2 上(rebuild 个目标)。
+     1>_PrepareForClean:
+         正在删除文件“x64\Release\ADCDriver.lastbuildstate”。
+       InitializeBuildStatus:
+         正在创建“x64\Release\ADCDriver.unsuccessfulbuild”，因为已指定“AlwaysCreate”。
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W1 /WX- /O2 /D _WINDLL /Gm- /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release\\" /Fd"x64\Release\vc100.pdb" /Gd /TC /errorReport:prompt ADCDriver.c main.c
+         ADCDriver.c
+         main.c
+         Generating Code...
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\fortu\Documents\GitHub\ADCDriver\x64\Release\ADCDriver.dll" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"x64\Release\ADCDriver.dll.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /PDB:"C:\Users\fortu\Documents\GitHub\ADCDriver\x64\Release\ADCDriver.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\fortu\Documents\GitHub\ADCDriver\x64\Release\ADCDriver.lib" /MACHINE:X64 /DLL x64\Release\ADCDriver.obj
+         x64\Release\main.obj
+            正在创建库 C:\Users\fortu\Documents\GitHub\ADCDriver\x64\Release\ADCDriver.lib 和对象 C:\Users\fortu\Documents\GitHub\ADCDriver\x64\Release\ADCDriver.exp
+         ADCDriver.vcxproj -> C:\Users\fortu\Documents\GitHub\ADCDriver\x64\Release\ADCDriver.dll
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"C:\Users\fortu\Documents\GitHub\ADCDriver\x64\Release\ADCDriver.dll;#2" /manifest x64\Release\ADCDriver.dll.intermediate.manifest
+       FinalizeBuildStatus:
+         正在删除文件“x64\Release\ADCDriver.unsuccessfulbuild”。
+         正在对“x64\Release\ADCDriver.lastbuildstate”执行 Touch 任务。
+     1>已完成生成项目“C:\Users\fortu\Documents\GitHub\ADCDriver\ADCDriver\ADCDriver.vcxproj”(rebuild 个目标)的操作。
+
+生成成功。
+
+已用时间 00:00:00.88

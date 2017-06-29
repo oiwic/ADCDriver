@@ -31,7 +31,7 @@ DLLAPI int OpenADC(int num)
 	 if(selectdev == 0)
 	{
 		pcap_freealldevs(firstdev);
-		return -1;
+		return ERR_NONETCARD;
 	 }
 	/* 打开网络接口,设置最大帧长度为1500B,超时等待100ms */  
 	 pcapHandle=pcap_open_live(selectdev->name,1500,1,100,errbuf);
@@ -46,16 +46,16 @@ DLLAPI int OpenADC(int num)
 	if(pcap_compile(pcapHandle,&fcode,"ether proto 43605 && not ether src 34.97.f6.8d.41.45",1,0) < 0)
 	{
 		pcap_freealldevs(firstdev);
-        return -1;
+        return ERR_OTHER;
 	}
 	/* 设置过滤器 */
 	if(pcap_setfilter(pcapHandle,&fcode) < 0)
 	{
 		pcap_freealldevs(firstdev);
-        return -1;
+        return ERR_OTHER;
 	}
 	pcap_freealldevs(firstdev);
-	return 0;
+	return OK;
 }
 
 DLLAPI int CloseADC()
@@ -82,36 +82,36 @@ DLLAPI int SendData(int len,unsigned char*pData)
 		else
 			*(buf + i) = *(pData + i - 14);//Data
 	}
-	if (pcap_sendpacket(pcapHandle, buf, length) != 0)  return -1;
-	return 0;
+	if (pcap_sendpacket(pcapHandle, buf, length) != 0)  return ERR_WINPCAP;
+	return OK;
 }
 
-DLLAPI int RecvData(int len, int column, unsigned char*pDataI, unsigned char*pDataQ)
+DLLAPI int RecvData(int row, int column, unsigned char*pDataI, unsigned char*pDataQ)
 {
 	unsigned int totalI = 0;
 	unsigned int totalQ = 0;
 	unsigned int recvcountI = 0;
 	unsigned int recvcountQ = 0;
-	int res;
-	short init = 0;
+	unsigned int len = row*column;
+	int ret;
+	short bInit = 0;
 	unsigned short counter; //frame count
 	unsigned short frameCnt;//recv frame count
 	struct pcap_pkthdr *header;
 	const u_char *pkt_data;
 	while( totalI < len || totalQ < len)
 	{
-		res = pcap_next_ex( pcapHandle, &header, &pkt_data);
-		if(res > 0)
+		ret = pcap_next_ex( pcapHandle, &header, &pkt_data);
+		if(ret > 0)
 		{
-			if(init == 0)
+			if(bInit == 0)
 			{
-				init = 1;
+				bInit = 1;
 				counter = ((*(pkt_data + 14))<<8) + (*(pkt_data + 15));	
 			}
 			frameCnt = ((*(pkt_data + 14))<<8) + (*(pkt_data + 15));	
 			if(frameCnt == counter)
 			{
-			
 				if(1 == *(pkt_data+16) && totalQ<len)//channel Q
 				{
 					if(recvcountQ + header->caplen-17 < column)//if recv length is less than column
@@ -144,20 +144,13 @@ DLLAPI int RecvData(int len, int column, unsigned char*pDataI, unsigned char*pDa
 					}
 					counter++;
 				}
-				else
-					return -3;//通道号错误，基本不会出现
+				else	return ERR_CHANNEL;
 			}
-			else
-			{
-				continue;//帧计数错误，这里不返回，将缓存清空后以超时错误返回.
-			}
+			else continue;//帧计数错误，这里不返回，将缓存清空后以超时错误返回.
 		}
-		else
-		{ 
-			return -1;//超时错误
-		}
+		else	return ERR_NODATA;//超时错误
 	}
-	return 0;
+	return OK;
 }
 
 DLLAPI int RecvDemo(int row,int* pData)
@@ -180,23 +173,26 @@ DLLAPI int RecvDemo(int row,int* pData)
 			frameCnt = ((*(pkt_data + 14))<<8) + (*(pkt_data + 15));
 			if(frameCnt == counter)
 			{
-				unsigned char data[8];
-				data[0] = *(pkt_data+3+17);
-				data[1] = *(pkt_data+2+17);
-				data[2] = *(pkt_data+1+17);
-				data[3] = *(pkt_data+0+17);
-				data[4] = *(pkt_data+7+17);
-				data[5] = *(pkt_data+6+17);
-				data[6] = *(pkt_data+5+17);
-				data[7] = *(pkt_data+4+17);
-				memcpy(pData+2*i,data,8);
-				counter++;
+				if(34 == *(pkt_data+16))
+				{
+					unsigned char data[8];
+					data[0] = *(pkt_data+3+17);
+					data[1] = *(pkt_data+2+17);
+					data[2] = *(pkt_data+1+17);
+					data[3] = *(pkt_data+0+17);
+					data[4] = *(pkt_data+7+17);
+					data[5] = *(pkt_data+6+17);
+					data[6] = *(pkt_data+5+17);
+					data[7] = *(pkt_data+4+17);
+					memcpy(pData+2*i,data,8);
+					counter++;
+				}
+				else	return ERR_CHANNEL;
 			}
 		}
-		else
-			return -1;
+		else	return ERR_NODATA;
 	}
-	return 0;
+	return OK;
 }
 
 DLLAPI int GetAdapterList(char *list)
@@ -205,16 +201,31 @@ DLLAPI int GetAdapterList(char *list)
 	pcap_if_t *selectdev;
 	char   errbuf[PCAP_ERRBUF_SIZE];
 	int pos = 0;
-	/* 查找设备 */
-	 pcap_findalldevs(&firstdev,errbuf);
-	 selectdev = firstdev;
-	 while(selectdev)
-	 {
-		 memcpy(list + pos,selectdev->description,strlen(selectdev->description));
-		 pos = pos + strlen(selectdev->description)+1;
-		 *(list + pos - 1) = '\n';
-		 selectdev = selectdev->next;
-	 }
+	pcap_findalldevs(&firstdev,errbuf);
+	selectdev = firstdev;
+	while(selectdev)
+	{
+		memcpy(list + pos,selectdev->description,strlen(selectdev->description));
+		pos = pos + strlen(selectdev->description)+1;
+		*(list + pos - 1) = '\n';
+		selectdev = selectdev->next;
+	}
 	 *(list + pos - 1) = 0;
-	 return 0;
+	 return OK;
+}
+
+DLLAPI int GetErrorMsg(int errorcode,char *strMsg)
+{
+	char* info;
+	switch(errorcode)
+	{
+		case ERR_NONETCARD:info = "不存在该网卡，可以通过GetAdapterList确认网卡编号。";break;
+		case ERR_WINPCAP:  info = "WinPCap内部错误，请尝试重启电脑。";break;
+		case ERR_NODATA:   info = "在限定时间内没有接收到足够数据，请检查网络状况。";break;
+		case ERR_CHANNEL:  info = "数据通道不对，可能是数据错误或者不支持的协议";break;
+		case ERR_OTHER:	   info = "其他错误，比中彩票概率更低。";break;
+		default:		   info = "你确定这是ADC返回的错误？";break;
+	}
+	strcat_s(strMsg,1024,info);
+	return OK;
 }
