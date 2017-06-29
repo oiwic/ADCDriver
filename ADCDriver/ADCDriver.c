@@ -229,3 +229,11 @@ DLLAPI int GetErrorMsg(int errorcode,char *strMsg)
 	strcat_s(strMsg,1024,info);
 	return OK;
 }
+
+DLLAPI int GetSoftInformation(char *pInformation)
+{
+	char *strInfo = "USTCADC Driver v1.0 @20170630";
+	memcpy(pInformation,strInfo,strlen(strInfo));
+	pInformation[strlen(strInfo)] = 0;
+	return OK;
+}
