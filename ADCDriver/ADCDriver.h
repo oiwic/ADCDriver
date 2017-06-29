@@ -7,9 +7,9 @@
 #endif
 
 #define OK 0
-#define ERR_NONETCARD 1
-#define ERR_WINPCAP 2
-#define ERR_NODATA 3
+#define ERR_NODATA 1
+#define ERR_NONETCARD 2
+#define ERR_WINPCAP 3
 #define ERR_CHANNEL 4
 #define ERR_HANDLE 5
 #define ERR_OTHER 100
@@ -28,4 +28,6 @@ DLLAPI int RecvDemo(int row,int* pData);
 DLLAPI int GetAdapterList(char*list);
 /* 返回错误信息 */
 DLLAPI int GetErrorMsg(int errorcode,char *strMsg);
+/* 获取版本信息 */
+DLLAPI int GetSoftInformation(char *pInformation);
 #endif
