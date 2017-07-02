@@ -60,7 +60,8 @@ DLLAPI int OpenADC(int num)
 
 DLLAPI int CloseADC()
 {
-	pcap_close(pcapHandle);
+	if(pcapHandle != NULL)
+		pcap_close(pcapHandle);
 	pcapHandle = NULL;
 	return OK;
 }
