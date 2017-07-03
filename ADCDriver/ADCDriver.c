@@ -223,13 +223,13 @@ DLLAPI int GetErrorMsg(int errorcode,char *strMsg)
 	char* info;
 	switch(errorcode)
 	{
-		case ERR_NONETCARD:info = "不存在该网卡，可以通过GetAdapterList确认网卡编号。";break;
-		case ERR_NODATA:   info = "在限定时间内没有接收到足够数据，请检查网络状况。";break;
-		case ERR_WINPCAP:  info = "WinPCap内部错误，请尝试重启电脑。";break;
-		case ERR_CHANNEL:  info = "数据通道不对，可能是数据错误或者不支持的协议";break;
-		case ERR_OTHER:	   info = "其他错误，比中彩票概率更低。";break;
-		case ERR_HANDLE:   info = "网卡句柄错误，可能未打开网卡。";break;
-		default:		   info = "你确定这是ADC返回的错误？";break;
+		case ERR_NONETCARD:info = "不存在该网卡，可以通过GetAdapterList确认网卡编号。\n";break;
+		case ERR_NODATA:   info = "在限定时间内没有接收到足够数据，请检查网络状况。\n";break;
+		case ERR_WINPCAP:  info = "WinPCap内部错误，请尝试重启电脑。\n";break;
+		case ERR_CHANNEL:  info = "数据通道不对，可能是数据错误或者不支持的协议。\n";break;
+		case ERR_OTHER:	   info = "其他错误，比中彩票概率更低。\n";break;
+		case ERR_HANDLE:   info = "网卡句柄错误，可能未打开网卡。\n";break;
+		default:		   info = "你确定这是ADC返回的错误？\n";break;
 	}
 	strcat_s(strMsg,1024,info);
 	return OK;
