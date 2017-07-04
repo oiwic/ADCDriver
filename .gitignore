@@ -1,7 +1,11 @@
 ADCDriver/x64/Release/ADCDriver.Build.CppClean.log
 *.cache
 ADCDriver/x64/Release/ADCDriver.obj
+ADCDriver/Debug
 *.pdb
 *.pdb
 *.obj
 ADCDriver/Debug/link.write.1.tlog
+x64
+Debug
+ipch

@@ -1,6 +1,6 @@
 #define DLLAPI  __declspec(dllexport)
 
-#include "ADCDriver.h"
+#include "USTCADCDriver.h"
 #include "pcap.h"
 #include <Winsock2.h>
 
@@ -8,10 +8,6 @@ pcap_t *pcapHandle = NULL;									//监听句柄
 unsigned char macSrc[6] = {0x34,0x97,0xf6,0x8d,0x41,0x45};	//源mac地址
 unsigned char macDst[6] = {0xff,0xff,0xff,0xff,0xff,0xff};	//目的mac地址
 unsigned char protocal[2] = {0xaa,0x55};					//协议类型
-
-
-/* 丢弃一个波形 */
-static void ThrowAWave();
 
 DLLAPI int OpenADC(int num)
 {
@@ -218,29 +214,30 @@ DLLAPI int GetAdapterList(char *list)
 	 return OK;
 }
 
-DLLAPI int GetErrorMsg(int errorcode,char *strMsg)
-{
-	char *prefix = "USTCADCDRIVER API failed: ";
-	char* info;	
-	switch(errorcode)
-	{
-		case ERR_NODATA:   info = "Receive data timeout, check the net status.\n";break;
-		case ERR_NONETCARD:info = "Do not exist netcard, call GetAdapterList to get a valid list.\n";break;
-		case ERR_WINPCAP:  info = "WinPCap inner error, try reboot computer.\n";break;
-		case ERR_CHANNEL:  info = "Data channel error, may be the protocal error.\n";break;
-		case ERR_OTHER:	   info = "Other error, the posibility is less than winning a bit lottery.\n";break;
-		case ERR_HANDLE:   info = "Invalid handle, make sure you have opened the device.\n";break;
-		default:		   info = "Are you sure this was caused by USTCADCDriver?\n";
-	}
-	strcat_s(strMsg,1024,prefix);
-	strcat_s(strMsg,1024,info);
-	return OK;
-}
 
 DLLAPI int GetSoftInformation(char *pInformation)
 {
 	char *strInfo = "USTCADC Driver v1.1 @20170704";
 	memcpy(pInformation,strInfo,strlen(strInfo));
 	pInformation[strlen(strInfo)] = 0;
+	return OK;
+}
+
+DLLAPI int GetErrorMsg(int errorcode ,char * strMsg)
+{
+	char *prefix = "USTCDACDRIVER API failed: ";
+	char *info;
+	switch(errorcode)
+	{
+		case ERR_NODATA:info = "Reveive data timeout, check the net status.\n";break;
+		case ERR_NONETCARD: info = "Do not exist netcard. call GetAdatpterList to get a valid list.\n";break;
+		case ERR_WINPCAP: info = "WinPCap inner error, try reboot computer.\n";break;
+		case ERR_CHANNEL: info = "Data channel error, may be the protocal error.\n";break;
+		case ERR_OTHER: info = "Other error, the posibility is less than winning a big lottery.\n";break;
+		case ERR_HANDLE: info = "Invalid handle, make sure you have opened the device.\n";break;
+		default: info = "Are you sure this was caused by USTCADCDriver?\n";
+	}
+	strcpy_s(strMsg,1024,prefix);
+	strcat_s(strMsg,1024,info);
 	return OK;
 }
