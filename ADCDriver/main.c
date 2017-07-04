@@ -1,6 +1,7 @@
 
 //#define DEBUG
 //#define DEBUG1
+//#define DEBUG2
 
 #ifdef DEBUG
 #include "ADCDriver.h"
@@ -31,6 +32,17 @@ int main()
 {
 	char list[100];
 	GetAdapterList(list);
+	printf(list);
+}
+#endif
+
+#ifdef DEBUG2
+#include "ADCDriver.h"
+#include <stdio.h>
+int main()
+{
+	char list[1024]="";
+	GetErrorMsg(1,list);
 	printf(list);
 }
 #endif

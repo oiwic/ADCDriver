@@ -220,24 +220,26 @@ DLLAPI int GetAdapterList(char *list)
 
 DLLAPI int GetErrorMsg(int errorcode,char *strMsg)
 {
-	char* info;
+	char *prefix = "USTCADCDRIVER API failed: ";
+	char* info;	
 	switch(errorcode)
 	{
-		case ERR_NONETCARD:info = "不存在该网卡，可以通过GetAdapterList确认网卡编号。\n";break;
-		case ERR_NODATA:   info = "在限定时间内没有接收到足够数据，请检查网络状况。\n";break;
-		case ERR_WINPCAP:  info = "WinPCap内部错误，请尝试重启电脑。\n";break;
-		case ERR_CHANNEL:  info = "数据通道不对，可能是数据错误或者不支持的协议。\n";break;
-		case ERR_OTHER:	   info = "其他错误，比中彩票概率更低。\n";break;
-		case ERR_HANDLE:   info = "网卡句柄错误，可能未打开网卡。\n";break;
-		default:		   info = "你确定这是ADC返回的错误？\n";break;
+		case ERR_NODATA:   info = "Receive data timeout, check the net status.\n";break;
+		case ERR_NONETCARD:info = "Do not exist netcard, call GetAdapterList to get a valid list.\n";break;
+		case ERR_WINPCAP:  info = "WinPCap inner error, try reboot computer.\n";break;
+		case ERR_CHANNEL:  info = "Data channel error, may be the protocal error.\n";break;
+		case ERR_OTHER:	   info = "Other error, the posibility is less than winning a bit lottery.\n";break;
+		case ERR_HANDLE:   info = "Invalid handle, make sure you have opened the device.\n";break;
+		default:		   info = "Are you sure this was caused by USTCADCDriver?\n";
 	}
+	strcat_s(strMsg,1024,prefix);
 	strcat_s(strMsg,1024,info);
 	return OK;
 }
 
 DLLAPI int GetSoftInformation(char *pInformation)
 {
-	char *strInfo = "USTCADC Driver v1.0 @20170630";
+	char *strInfo = "USTCADC Driver v1.1 @20170704";
 	memcpy(pInformation,strInfo,strlen(strInfo));
 	pInformation[strlen(strInfo)] = 0;
 	return OK;
