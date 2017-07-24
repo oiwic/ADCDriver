@@ -11,7 +11,7 @@ DLLAPI int OpenADC(int num);
 /* 关闭ADC设备 */
 DLLAPI int CloseADC();
 /* 往ADC写入数据 */
-DLLAPI int SendData(int len,unsigned char*pData);
+DLLAPI int SendData(unsigned char id,int len,unsigned char*pData);
 /* 从ADC读回数据 */
 DLLAPI int RecvData(int len,int column, unsigned char*pDataI, unsigned char *pDataQ);
 /* 从ADC读回解模数据 */

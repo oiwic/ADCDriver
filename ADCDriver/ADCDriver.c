@@ -63,7 +63,7 @@ DLLAPI int CloseADC()
 	return OK;
 }
 
-DLLAPI int SendData(int len,unsigned char*pData)
+DLLAPI int SendData(unsigned char id,int len,unsigned char*pData)
 {
 	unsigned char *buf = NULL;
 	int length = len+14;
@@ -81,6 +81,7 @@ DLLAPI int SendData(int len,unsigned char*pData)
 		else
 			*(buf + i) = *(pData + i - 14);//Data
 	}
+	*(buf + 11) = id;
 	if (pcap_sendpacket(pcapHandle, buf, length) != 0)  return ERR_WINPCAP;
 	return OK;
 }
@@ -217,7 +218,7 @@ DLLAPI int GetAdapterList(char *list)
 
 DLLAPI int GetSoftInformation(char *pInformation)
 {
-	char *strInfo = "USTCADC Driver v1.1 @20170704";
+	char *strInfo = "USTCADC Driver v2.0 @20170724";
 	memcpy(pInformation,strInfo,strlen(strInfo));
 	pInformation[strlen(strInfo)] = 0;
 	return OK;
