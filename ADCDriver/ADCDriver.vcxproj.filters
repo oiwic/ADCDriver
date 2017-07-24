@@ -29,5 +29,8 @@
     <ClInclude Include="USTCADCDriver.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="USTCADCError.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

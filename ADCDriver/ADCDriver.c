@@ -2,6 +2,7 @@
 
 #include "USTCADCDriver.h"
 #include "pcap.h"
+#include "USTCADCError.h"
 #include <Winsock2.h>
 
 pcap_t *pcapHandle = NULL;									//¼àÌý¾ä±ú
@@ -224,19 +225,46 @@ DLLAPI int GetSoftInformation(char *pInformation)
 
 DLLAPI int GetErrorMsg(int errorcode ,char * strMsg)
 {
-	char *prefix = "USTCDACDRIVER API failed: ";
-	char *info;
-	switch(errorcode)
+	if(errorcode & USERDEF)
 	{
-		case ERR_NODATA:info = "Reveive data timeout, check the net status.\n";break;
-		case ERR_NONETCARD: info = "Do not exist netcard. call GetAdatpterList to get a valid list.\n";break;
-		case ERR_WINPCAP: info = "WinPCap inner error, try reboot computer.\n";break;
-		case ERR_CHANNEL: info = "Data channel error, may be the protocal error.\n";break;
-		case ERR_OTHER: info = "Other error, the posibility is less than winning a big lottery.\n";break;
-		case ERR_HANDLE: info = "Invalid handle, make sure you have opened the device.\n";break;
-		default: info = "Are you sure this was caused by USTCADCDriver?\n";
+		char *prefix = "USTCDACDRIVER API failed: ";
+		char *info;
+		if(errorcode & FACILITY_WINPCAP)
+		{
+			info = pcap_geterr(pcapHandle);
+		}
+		else
+		{
+			switch(errorcode)
+			{
+				case ERR_NODATA:info = "Reveive data timeout, check the net status.\n";break;
+				case ERR_NONETCARD: info = "Do not exist netcard. call GetAdatpterList to get a valid list.\n";break;
+				case ERR_CHANNEL: info = "Data channel error, may be the protocal error.\n";break;
+				case ERR_OTHER: info = "Other error, the posibility is less than winning a big lottery.\n";break;
+				case ERR_HANDLE: info = "Invalid handle, make sure you have opened the device.\n";break;
+				default: info = "Are you sure this was caused by USTCADCDriver?\n";
+			}
+		}
+		strcpy_s(strMsg,1024,prefix);
+		strcat_s(strMsg,1024,info);
+		return OK;
 	}
-	strcpy_s(strMsg,1024,prefix);
-	strcat_s(strMsg,1024,info);
-	return OK;
+	else
+	{
+		HLOCAL hlocal = NULL;
+		DWORD dwSystemLocale = MAKELANGID( LANG_NEUTRAL, SUBLANG_NEUTRAL );  
+		BOOL bOk = FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM |
+		FORMAT_MESSAGE_IGNORE_INSERTS |
+		FORMAT_MESSAGE_ALLOCATE_BUFFER,
+		NULL,errorcode,dwSystemLocale,(PTSTR)&hlocal, 0, NULL );
+		if(bOk && hlocal != NULL)
+		{
+			char *prefix = "Windows API failed: ";
+			strcpy_s(strMsg,1024,prefix);
+			strcat_s(strMsg,1024,hlocal);
+			LocalFree(hlocal);
+			return OK;
+		}
+		return ERR_OTHER;
+	}
 }

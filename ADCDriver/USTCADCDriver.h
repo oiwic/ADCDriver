@@ -6,14 +6,6 @@
 #define DLLAPI __declspec(dllimport)
 #endif
 
-#define OK 0
-#define ERR_NODATA 1
-#define ERR_NONETCARD 2
-#define ERR_WINPCAP 3
-#define ERR_CHANNEL 4
-#define ERR_HANDLE 5
-#define ERR_OTHER 100
-
 /* 打开ADC设备，需要提供目的ADC的MAC地址，协议类型，网卡的设备号 */
 DLLAPI int OpenADC(int num);
 /* 关闭ADC设备 */

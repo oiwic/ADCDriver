@@ -83,6 +83,7 @@
   <ItemGroup>
     <ClInclude Include="USTCADCDriver.h" />
     <ClInclude Include="pcap.h" />
+    <ClInclude Include="USTCADCError.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
