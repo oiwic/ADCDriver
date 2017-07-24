@@ -217,7 +217,7 @@ DLLAPI int GetAdapterList(char *list)
 
 DLLAPI int GetSoftInformation(char *pInformation)
 {
-	char *strInfo = "USTCADC Driver v1.1 @20170704";
+	char *strInfo = "USTCADC Driver v1.2 @20170724";
 	memcpy(pInformation,strInfo,strlen(strInfo));
 	pInformation[strlen(strInfo)] = 0;
 	return OK;
