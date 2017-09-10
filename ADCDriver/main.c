@@ -3,6 +3,7 @@
 //#define DEBUG1
 //#define DEBUG2
 
+
 #ifdef DEBUG
 #include "ADCDriver.h"
 #include <stdio.h>
@@ -44,5 +45,21 @@ int main()
 	char list[1024]="";
 	GetErrorMsg(1,list);
 	printf(list);
+}
+#endif
+
+//#define DEBUG3
+#ifdef DEBUG3
+#include "USTCADCDriver.h"
+#include <stdio.h>
+int main()
+{
+	int id1,id2,id3;
+	OpenADC(&id1,1,"00-00-00-00-00-01");
+	OpenADC(&id2,2,"00-00-00-00-00-02");
+	OpenADC(&id3,3,"00-00-00-00-00-03");
+	CloseADC(id1);
+	CloseADC(id2);
+	CloseADC(id3);
 }
 #endif

@@ -41,6 +41,14 @@
 // Message text:
 // Invalid handle, make sure you have opened the device.
 #define ERR_HANDLE ERRORCODE(5)
+// Message ID:ERR_TOOMUCHOBJ
+// Message text:
+// You have been opened too much ADCs.
+#define ERR_TOOMUCHOBJ ERRORCODE(6)
+// Message ID:ERR_SETFILTER
+// Message text:
+// Compile filter error, you may check you mac address.
+#define ERR_COMPILEFILTER ERRORCODE(7)
 // Message ID:ERR_OTHER
 // Message text:
 // Other error, the posibility is less than winning a big lottery.
