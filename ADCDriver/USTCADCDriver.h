@@ -9,7 +9,7 @@
 #define MAX_ADCNUM 16
 
 /* 打开ADC设备，需要提供目的ADC的MAC地址，协议类型，网卡的设备号 */
-DLLAPI int OpenADC(int*id,int num,char *macDst);
+DLLAPI int OpenADC(int*id,char *macSrc,char *macDst);
 /* 关闭ADC设备 */
 DLLAPI int CloseADC(int id);
 /* 往ADC写入数据 */
@@ -22,8 +22,6 @@ DLLAPI int RecvDemo(int id, int row, int* pData);
 DLLAPI int GetMacAddress(int id,int isDst,unsigned char* pMac);
 /* 返回错误信息 */
 DLLAPI int GetErrorMsg(int id,int errorcode,char *strMsg);
-/* 返回网卡列表 */
-DLLAPI int GetAdapterList(char*list);
 /* 获取版本信息 */
 DLLAPI int GetSoftInformation(char *pInformation);
 #endif

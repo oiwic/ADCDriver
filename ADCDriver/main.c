@@ -63,3 +63,22 @@ int main()
 	CloseADC(id3);
 }
 #endif
+
+//#define DEBUG4
+#ifdef DEBUG4
+#include "USTCADCDriver.h"
+#include <stdio.h>
+int main()
+{
+	int id1,id2,id3,ret;
+	ret = OpenADC(&id1,"68-05-CA-47-45-9A","00-00-00-00-00-01");
+	printf("%d",ret);
+	ret = OpenADC(&id2,"68-05-CA-47-45-9A","00-00-00-00-00-02");
+	printf("%d",ret);
+	ret = OpenADC(&id3,"68-05-CA-47-45-9A","00-00-00-00-00-03");
+	printf("%d",ret);
+	CloseADC(id1);
+	CloseADC(id2);
+	CloseADC(id3);
+}
+#endif
