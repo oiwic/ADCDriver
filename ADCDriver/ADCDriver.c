@@ -48,7 +48,7 @@ int IsThisMac(char* adaptername,unsigned char *mac,int *isTrue)			//¸ù¾ÝÊÊÅäÆ÷Ãû
 int MacStr2Bin(char *strMac, unsigned char *mac)
 {
     int i;
-    char *start, *end;
+    char *start, *end = NULL;
     if ((mac == NULL) || (strMac == NULL))
         return -1;
     start = (char *) strMac;
@@ -192,7 +192,7 @@ DLLAPI int RecvData(int id,int row, int column, unsigned char*pDataI, unsigned c
 	unsigned int len = row*column;
 	int ret;
 	short bInit = 0;
-	unsigned short counter; //frame count
+	unsigned short counter = 0; //frame count
 	unsigned short frameCnt;//recv frame count
 	struct pcap_pkthdr *header;
 	const u_char *pkt_data;
@@ -257,7 +257,7 @@ DLLAPI int RecvDemo(int id,int row,int* pData)
 	int res;
 	struct pcap_pkthdr *header;
 	const u_char *pkt_data;
-	unsigned short counter;
+	unsigned short counter = 0;
 	unsigned short frameCnt;
 	int i;
 	if(id >= MAX_ADCNUM || id < 0) return ERR_HANDLE;
@@ -298,7 +298,7 @@ DLLAPI int RecvDemo(int id,int row,int* pData)
 
 DLLAPI int GetSoftInformation(char *pInformation)
 {
-	char *strInfo = "USTCADC Driver v2.1 @2017/09/20";
+	char *strInfo = "USTCADC dll driver v2.2 @2017/10/12";
 	memcpy(pInformation,strInfo,strlen(strInfo));
 	pInformation[strlen(strInfo)] = 0;
 	return OK;

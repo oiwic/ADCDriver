@@ -80,6 +80,9 @@
     <Link>
       <AdditionalDependencies>iphlpapi.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ADCDriver.c" />
