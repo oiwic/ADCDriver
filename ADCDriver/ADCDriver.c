@@ -276,16 +276,7 @@ DLLAPI int RecvDemo(int id,int row,int* pData)
 			{
 				if(34 == *(pkt_data+16))
 				{
-					unsigned char data[8];
-					data[0] = *(pkt_data+3+17);
-					data[1] = *(pkt_data+2+17);
-					data[2] = *(pkt_data+1+17);
-					data[3] = *(pkt_data+0+17);
-					data[4] = *(pkt_data+7+17);
-					data[5] = *(pkt_data+6+17);
-					data[6] = *(pkt_data+5+17);
-					data[7] = *(pkt_data+4+17);
-					memcpy(pData+2*i,data,8);
+					memcpy(pData+24*i,pkt_data+17,96);
 					counter++;
 				}
 				else	return ERR_CHANNEL;
@@ -293,12 +284,16 @@ DLLAPI int RecvDemo(int id,int row,int* pData)
 		}
 		else	return ERR_NODATA;
 	}
+	for(i=0;i<row*24;i++)
+	{
+		*(pData+i) = htonl(*(pData+i));
+	}
 	return OK;
 }
 
 DLLAPI int GetSoftInformation(char *pInformation)
 {
-	char *strInfo = "USTCADC dll driver v2.2 @2017/10/12";
+	char *strInfo = "USTCADC dll driver v2.3 @2017/11/21";
 	memcpy(pInformation,strInfo,strlen(strInfo));
 	pInformation[strlen(strInfo)] = 0;
 	return OK;
